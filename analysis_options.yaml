@@ -1,0 +1,6 @@
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.moor.dart"
+  plugins:
+    - moor

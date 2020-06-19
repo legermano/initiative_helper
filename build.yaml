@@ -1,0 +1,31 @@
+# build.yaml. This file is quite powerful, see https://pub.dev/packages/build_config
+# based on moor documentation, see https://moor.simonbinder.eu/docs/advanced-features/builder_options/
+
+targets:
+    $default:
+      builders:
+        # disable the default generator and enable the one emitting a .moor.dart file
+        moor_generator:
+          enabled: false
+        moor_generator|moor_generator_not_shared:
+          enabled: true
+          # If needed, you can configure the builder like this:
+          # options:
+          #   skip_verification_code: true
+          #   use_experimental_inference: true
+  
+        # Run mobx_generator when moor is done, which is not in this target.
+        mobx_codegen|mobx_generator:
+          enabled: false
+        # all other builders that need to work on moor classes should be disabled here
+        # as well
+    
+    run_mobx:
+      dependencies: ['initiative_helper']
+      builders:
+        # Disable moor builders. By default, those would run on each target
+        moor_generator:
+          enabled: false
+        moor_generator|preparing_builder:
+          enabled: false
+        # we don't need to disable moor_generator_not_shared, because it's disabled by default
