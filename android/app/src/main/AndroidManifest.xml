@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="initiative_helper"
+        android:label="Initiative Helper"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
