@@ -47,12 +47,18 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               case FutureStatus.fulfilled:
                 final List<Character> characters =
                     controller.charactersList.value;
-                return ListView.builder(
+                if (characters.length > 0) {
+                  return ListView.builder(
                     itemCount: characters.length,
                     itemBuilder: (_, index) {
                       return CharacterCard(
                           controller: controller, character: characters[index]);
-                    });
+                    }
+                  );  
+                } else {
+                  //TODO: Add the dice animation
+                  return Container();
+                }                
                 break;
               default:
                 return Container();

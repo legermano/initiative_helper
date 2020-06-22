@@ -74,12 +74,12 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Edit character'),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Form(
+            key: _formKey,
+            child: TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
                 hintText: 'What is the name of the character?',
@@ -88,74 +88,72 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
               validator: (text) {
                 if (text.isEmpty) {
                   return "Invalid name";
-                } else {
-                  return "aaa";
                 }
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //* It was needed to reinitialize because the current value wasn't been highlited
-                    initiativePicker = NumberPicker.integer(
-                      highlightSelectedValue: true,
-                      initialValue: initiativeValue,
-                      minValue: -1000,
-                      maxValue: 1000,
-                      onChanged: (v) => setState(() => initiativeValue = v)
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //* It was needed to reinitialize because the current value wasn't been highlited
+                  initiativePicker = NumberPicker.integer(
+                    highlightSelectedValue: true,
+                    initialValue: initiativeValue,
+                    minValue: -1000,
+                    maxValue: 1000,
+                    onChanged: (v) => setState(() => initiativeValue = v)
+                  ),
+                  Text(
+                    'Initiative value',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
                     ),
-                    Text(
-                      'Initiative value',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black54,
-                      ),
+                  ),
+                  IconButton(
+                    icon: Icon(FontAwesome5.dice_d20), 
+                    onPressed: () {
+                      final d20 = D20().roll('1d20');
+                      setState(() => initiativeValue = d20);
+                      initiativePicker.animateInt(d20);
+                    }
+                  ),
+                ]
+              ),
+              Column(
+                children: [
+                  //* It was needed to reinitialize because the current value wasn't been highlited
+                  modifierPicker = NumberPicker.integer(
+                    initialValue: modifierValue, 
+                    minValue: -1000, 
+                    maxValue: 1000, 
+                    onChanged: (v) => setState(() => modifierValue = v),
+                  ),
+                  Text(
+                    'Modifier value',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
                     ),
-                    IconButton(
-                      icon: Icon(FontAwesome5.dice_d20), 
-                      onPressed: () {
-                        final d20 = D20().roll('1d20');
-                        setState(() => initiativeValue = d20);
-                        initiativePicker.animateInt(d20);
-                      }
-                    ),
-                  ]
-                ),
-                Column(
-                  children: [
-                    //* It was needed to reinitialize because the current value wasn't been highlited
-                    modifierPicker = NumberPicker.integer(
-                      initialValue: modifierValue, 
-                      minValue: -1000, 
-                      maxValue: 1000, 
-                      onChanged: (v) => setState(() => modifierValue = v),
-                    ),
-                    Text(
-                      'Modifier value',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black54,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    IconButton(
-                      icon: Icon(FontAwesome5.dice_d20), 
-                      onPressed: () {
-                        final d20 = D20().roll('1d20');
-                        setState(() => modifierValue = d20);
-                        modifierPicker.animateInt(d20);
-                      }
-                    ),
-                  ]
-                )
-              ],
-            )
-          ],
-        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  IconButton(
+                    icon: Icon(FontAwesome5.dice_d20), 
+                    onPressed: () {
+                      final d20 = D20().roll('1d20');
+                      setState(() => modifierValue = d20);
+                      modifierPicker.animateInt(d20);
+                    }
+                  ),
+                ]
+              )
+            ],
+          )
+        ],
       ),
       actions: [
         FlatButton(
@@ -168,23 +166,25 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
         FlatButton(
           child: const Text('Save'),
           onPressed: () {
-            if (isCreating) {
-              final charactersCompanion = CharactersCompanion(
-                name: moor.Value(_nameController.text),
-                encounter: moor.Value(widget.encounterId),
-                initiative: moor.Value(initiativeValue),
-                modifier: moor.Value(modifierValue)
-              );
-              controller.addCharacter(charactersCompanion, widget.encounterId);
-            } else {
-              final character = widget.character.copyWith(
-                name: _nameController.text,
-                initiative: initiativeValue,
-                modifier: modifierValue
-              );
-              controller.updateCharacter(character, widget.character.encounter);  
+            if (_formKey.currentState.validate()) {
+              if (isCreating) {
+                final charactersCompanion = CharactersCompanion(
+                  name: moor.Value(_nameController.text),
+                  encounter: moor.Value(widget.encounterId),
+                  initiative: moor.Value(initiativeValue),
+                  modifier: moor.Value(modifierValue)
+                );
+                controller.addCharacter(charactersCompanion, widget.encounterId);
+              } else {
+                final character = widget.character.copyWith(
+                  name: _nameController.text,
+                  initiative: initiativeValue,
+                  modifier: modifierValue
+                );
+                controller.updateCharacter(character, widget.character.encounter);  
+              }            
+              Navigator.pop(context);
             }            
-            Navigator.pop(context);
           }, 
         )
       ],
