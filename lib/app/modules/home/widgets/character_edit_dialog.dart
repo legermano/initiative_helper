@@ -86,9 +86,11 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
                 helperText: 'The name of the character'
               ),
               validator: (text) {
+                String validation;
                 if (text.isEmpty) {
-                  return "Invalid name";
+                  validation = "Invalid name";
                 }
+                return validation;
               },
             ),
           ),

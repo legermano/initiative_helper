@@ -5,6 +5,7 @@ import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mobx/mobx.dart';
 import 'home_controller.dart';
 
@@ -47,17 +48,23 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               case FutureStatus.fulfilled:
                 final List<Character> characters =
                     controller.charactersList.value;
-                if (characters.length > 0) {
+                if ((characters.length < 1) && 
+                    (controller.activeEncounter.id == 0))  {
+                  //TODO: Add the dice animation
+                  return Column(
+                    children: [
+                      Lottie.asset('assets/dice_red.json'),
+                      Text('Choose an encounter')
+                    ],
+                  ); 
+                } else {
                   return ListView.builder(
                     itemCount: characters.length,
                     itemBuilder: (_, index) {
                       return CharacterCard(
-                          controller: controller, character: characters[index]);
+                        controller: controller, character: characters[index]);
                     }
-                  );  
-                } else {
-                  //TODO: Add the dice animation
-                  return Container();
+                  );
                 }                
                 break;
               default:
