@@ -11,7 +11,7 @@ import 'package:numberpicker/numberpicker.dart';
 class CharacterEditDialog extends StatefulWidget {
   final HomeController controller;
   //? If is editing an existing character
-  final Character character;
+  final CharacterWithInfo character;
   //? If is creating a new character
   final int encounterId;
   
@@ -42,9 +42,9 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
 
     isCreating = (widget.encounterId != null);
 
-    _nameController.text = isCreating ? '' : widget.character.name;
-    initiativeValue      = isCreating ? 0  : widget.character.initiative;
-    modifierValue        = isCreating ? 0  : widget.character.modifier;
+    _nameController.text = isCreating ? '' : widget.character.character.name;
+    initiativeValue      = isCreating ? 0  : widget.character.character.initiative;
+    modifierValue        = isCreating ? 0  : widget.character.character.modifier;
 
     initiativePicker = NumberPicker.integer(
       highlightSelectedValue: true,
@@ -178,12 +178,15 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
                 );
                 controller.addCharacter(charactersCompanion, widget.encounterId);
               } else {
-                final character = widget.character.copyWith(
+                final ch = widget.character.character.copyWith(
                   name: _nameController.text,
                   initiative: initiativeValue,
                   modifier: modifierValue
                 );
-                controller.updateCharacter(character, widget.character.encounter);  
+                CharacterWithInfo character = widget.character;
+                character.character = ch;
+                character.initiativeWithModifier = (ch.initiative + ch.modifier);
+                controller.updateCharacter(character);
               }            
               Navigator.pop(context);
             }            

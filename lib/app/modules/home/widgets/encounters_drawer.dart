@@ -102,33 +102,37 @@ class _EncounterDrawerEntry extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(6),
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Flexible(
-                  fit: FlexFit.loose,
-                  flex: 0,
+                  fit: FlexFit.tight,
+                  flex: 1,
                   child: Text(
                     title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).accentColor
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      'Combat encounter',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  )
-                ),
+                //? Really needed
+                // Flexible(
+                //   flex: 1,
+                //   fit: FlexFit.tight,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8),
+                //     child: Text(
+                //       'Combat encounter',
+                //       overflow: TextOverflow.ellipsis,
+                //       maxLines: 1,
+                //     ),
+                //   )
+                // ),
                 // Spacer(),
                 Flexible(
                   flex: 0,
+                  fit: FlexFit.tight,
                   child: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     color: Colors.red,

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobx/mobx.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,49 +31,83 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         child: Scaffold(
           appBar: AppBar(
             title: Observer(builder: (_) {
-              return Text(controller.activeEncounter.description);
+              return Text(
+                controller.activeEncounter.description + ' ' +
+                //? Show the current turn on the footer
+                (
+                  controller.activeEncounter.currentTurn == 0 
+                  ? '' 
+                  : '- Turn : ' + controller.activeEncounter.currentTurn.toString()
+                ),
+                overflow: TextOverflow.ellipsis,
+              );
             }),
           ),
           drawer: EncounterDrawer(controller: controller),
           body: Observer(builder: (_) {
-            switch (controller.charactersList.status) {
-              case FutureStatus.pending:
-                return const Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(),
-                );
-                break;
-              case FutureStatus.fulfilled:
-                final List<Character> characters =
-                    controller.charactersList.value;
-                if ((characters.length < 1) && 
-                    (controller.activeEncounter.id == 0))  {
-                  return Column(
-                    children: [
-                      //! In the begging of the json file is set to start
-                      //! the animation in second 153 DO NOT CHANGE
-                      Lottie.asset('assets/dice_red.json'),
-                      Text(
-                        'Choose an encounter',
-                        style: Theme.of(context).textTheme.headline6,
-                      )
-                    ],
-                  ); 
-                } else {
-                  return ListView.builder(
-                    itemCount: characters.length,
-                    itemBuilder: (_, index) {
-                      return CharacterCard(
-                        controller: controller, character: characters[index]);
-                    }
+            final List<CharacterWithInfo> characters =
+                controller.charactersList;
+            if ((characters.length < 1) && 
+                (controller.activeEncounter.id == 0))  {
+              return Column(
+                children: [
+                  //! In the begging of the json file is set to start
+                  //! the animation in second 153 DO NOT CHANGE
+                  Lottie.asset('assets/dice_red.json'),
+                  Text(
+                    'Choose an encounter',
+                    style: Theme.of(context).textTheme.headline6,
+                  )
+                ],
+              ); 
+            } else {
+              return ListView.builder(
+                itemCount: characters.length,
+                itemBuilder: (_, index) {
+                  return CharacterCard(
+                    controller: controller, character: characters[index]
                   );
-                }                
-                break;
-              default:
-                return Container();
-            }
+                }
+              );
+            } 
           }),
           persistentFooterButtons: [
+            Observer(
+              builder:(_) {
+                return FloatingActionButton(
+                  child: Icon(Icons.arrow_back_ios),
+                  onPressed: controller.activeEncounter.id == 0
+                    ? null
+                    : () {
+                      controller.backwardQueue();
+                    }
+                );
+              } 
+            ),
+            Observer(
+              builder:(_) {
+                return FloatingActionButton(
+                  child: Icon(Icons.play_arrow),
+                  onPressed: controller.activeEncounter.id == 0
+                    ? null
+                    : () {
+                      controller.startQueue();
+                    }
+                );
+              } 
+            ),
+            Observer(
+              builder:(_) {
+                return FloatingActionButton(
+                  child: Icon(Icons.arrow_forward_ios),
+                  onPressed: controller.activeEncounter.id == 0
+                    ? null
+                    : () {
+                      controller.fowardQueue();
+                    }
+                );
+              } 
+            ),
             Observer(builder: (_) {
               return FloatingActionButton(
                 child: Icon(Icons.add),
@@ -94,7 +126,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       );
                     },
               );
-            }),
+            })
           ],
         ),
       ),

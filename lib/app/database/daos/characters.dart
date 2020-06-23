@@ -17,7 +17,7 @@ class CharacterDao extends DatabaseAccessor<AppDatabase> with _$CharacterDaoMixi
 
   CharacterDao(this.db) : super(db);
 
-  Future createCharacter(CharactersCompanion character) {
+  Future<int> createCharacter(CharactersCompanion character) {
     return into(characters).insert(character);
   }
 

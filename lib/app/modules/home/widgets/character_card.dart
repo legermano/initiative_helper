@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
 
 class CharacterCard extends StatelessWidget {
   final HomeController controller;
-  final Character character;
+  final CharacterWithInfo character;
 
   CharacterCard({Key key, @required this.controller, @required this.character})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Character ch = character.character;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -19,20 +21,34 @@ class CharacterCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
+              flex: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: character.turn ?
+                Icon(
+                  //? Maybe dice FontAwesome5.dice                  
+                  RpgAwesome.broadsword,
+                  color: Colors.amberAccent,
+                  size: 24,
+                )
+                : SizedBox(width: 24)
+              )
+            ),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(character.name),
+                  Text(ch.name),
                   Row(
                     children: [
                       Text(
-                        'Initiative : '+character.initiative.toString(),
+                        'Initiative : '+ch.initiative.toString(),
                         style: const TextStyle(fontSize: 12),
                       ),
                       SizedBox(width: 8,),
                       Text(
-                        'Modifier : '+character.modifier.toString(),
+                        'Modifier : '+ch.modifier.toString(),
                         style: const TextStyle(fontSize: 12),
                       )
                     ],
