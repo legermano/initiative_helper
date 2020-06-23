@@ -50,11 +50,15 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     controller.charactersList.value;
                 if ((characters.length < 1) && 
                     (controller.activeEncounter.id == 0))  {
-                  //TODO: Add the dice animation
                   return Column(
                     children: [
+                      //! In the begging of the json file is set to start
+                      //! the animation in second 153 DO NOT CHANGE
                       Lottie.asset('assets/dice_red.json'),
-                      Text('Choose an encounter')
+                      Text(
+                        'Choose an encounter',
+                        style: Theme.of(context).textTheme.headline6,
+                      )
                     ],
                   ); 
                 } else {
@@ -77,8 +81,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 child: Icon(Icons.add),
                 //* When the app is starting it is not positioned in an encounter
                 //* So the button should be disabled
-                onPressed: controller.activeEncounter.description ==
-                        'Choose an encounter'
+                onPressed: controller.activeEncounter.id == 0
                     ? null
                     : () {
                       showDialog(
