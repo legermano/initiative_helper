@@ -85,6 +85,7 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
                 hintText: 'What is the name of the character?',
                 helperText: 'The name of the character'
               ),
+              textCapitalization: TextCapitalization.sentences,
               validator: (text) {
                 String validation;
                 if (text.isEmpty) {

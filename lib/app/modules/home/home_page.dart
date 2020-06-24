@@ -32,13 +32,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           appBar: AppBar(
             title: Observer(builder: (_) {
               return Text(
-                controller.activeEncounter.description + ' ' +
-                //? Show the current turn on the footer
-                (
-                  controller.activeEncounter.currentTurn == 0 
-                  ? '' 
-                  : '- Turn : ' + controller.activeEncounter.currentTurn.toString()
-                ),
+                controller.activeEncounter.description,
                 overflow: TextOverflow.ellipsis,
               );
             }),
@@ -71,63 +65,139 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               );
             } 
           }),
-          persistentFooterButtons: [
-            Observer(
-              builder:(_) {
-                return FloatingActionButton(
-                  child: Icon(Icons.arrow_back_ios),
-                  onPressed: controller.activeEncounter.id == 0
-                    ? null
-                    : () {
-                      controller.backwardQueue();
-                    }
-                );
-              } 
-            ),
-            Observer(
-              builder:(_) {
-                return FloatingActionButton(
-                  child: Icon(Icons.play_arrow),
-                  onPressed: controller.activeEncounter.id == 0
-                    ? null
-                    : () {
-                      controller.startQueue();
-                    }
-                );
-              } 
-            ),
-            Observer(
-              builder:(_) {
-                return FloatingActionButton(
-                  child: Icon(Icons.arrow_forward_ios),
-                  onPressed: controller.activeEncounter.id == 0
-                    ? null
-                    : () {
-                      controller.fowardQueue();
-                    }
-                );
-              } 
-            ),
-            Observer(builder: (_) {
-              return FloatingActionButton(
-                child: Icon(Icons.add),
-                //* When the app is starting it is not positioned in an encounter
-                //* So the button should be disabled
-                onPressed: controller.activeEncounter.id == 0
-                    ? null
-                    : () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => CharacterEditDialog(
-                          controller: controller,
-                          encounterId: controller.activeEncounter.id
+          bottomSheet: Observer(
+            builder: (_) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
+                    child: FloatingActionButton(                    
+                      child: Icon(Icons.arrow_back_ios),
+                      onPressed: controller.activeEncounter.id == 0
+                      ? null
+                      : () {
+                        controller.backwardQueue();
+                      }
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(2, 0, 0, 8),
+                    child: FloatingActionButton(
+                      child: Icon(Icons.play_arrow),
+                      onPressed: controller.activeEncounter.id == 0
+                      ? null
+                      : () {
+                        controller.startQueue();
+                      }
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(2, 0, 2, 8),
+                    child: FloatingActionButton(
+                      child: Icon(Icons.arrow_forward_ios),
+                      onPressed: controller.activeEncounter.id == 0
+                      ? null
+                      : () {
+                        controller.fowardQueue();
+                      }
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 18, 8, 0),
+                      child: Text(
+                        controller.activeEncounter.currentTurn == 0 
+                        ? '' 
+                        : 'Turn : ' + controller.activeEncounter.currentTurn.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
                         ),
-                      );
-                    },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(2, 0, 8, 8),
+                    child: FloatingActionButton(
+                      child: Icon(Icons.add),
+                      //* When the app is starting it is not positioned in an encounter
+                      //* So the button should be disabled
+                      onPressed: controller.activeEncounter.id == 0
+                        ? null
+                        : () {
+                          showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => CharacterEditDialog(
+                            controller: controller,
+                            encounterId: controller.activeEncounter.id
+                          ),
+                          );
+                        },
+                    ),
+                  )
+                ],
               );
-            })
-          ],
+            }
+          ),
+          // persistentFooterButtons: [
+          //   Observer(
+          //     builder: (_) {
+          //       return Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         mainAxisSize: MainAxisSize.max,
+          //         children: [
+          //           FloatingActionButton(
+          //             child: Icon(Icons.arrow_back_ios),
+          //             onPressed: controller.activeEncounter.id == 0
+          //             ? null
+          //             : () {
+          //               controller.backwardQueue();
+          //             }
+          //           ),
+          //           FloatingActionButton(
+          //             child: Icon(Icons.play_arrow),
+          //             onPressed: controller.activeEncounter.id == 0
+          //             ? null
+          //             : () {
+          //               controller.startQueue();
+          //             }
+          //           ),
+          //           FloatingActionButton(
+          //             child: Icon(Icons.arrow_forward_ios),
+          //             onPressed: controller.activeEncounter.id == 0
+          //             ? null
+          //             : () {
+          //               controller.fowardQueue();
+          //             }
+          //           ),
+          //           FloatingActionButton(
+          //             child: Icon(Icons.add),
+          //             //* When the app is starting it is not positioned in an encounter
+          //             //* So the button should be disabled
+          //             onPressed: controller.activeEncounter.id == 0
+          //               ? null
+          //               : () {
+          //                 showDialog(
+          //                 context: context,
+          //                 barrierDismissible: false,
+          //                 builder: (context) => CharacterEditDialog(
+          //                   controller: controller,
+          //                   encounterId: controller.activeEncounter.id
+          //                 ),
+          //                 );
+          //               },
+          //           )
+          //         ],
+          //       );
+          //     }
+          //   )
+          // ],
         ),
       ),
     );
