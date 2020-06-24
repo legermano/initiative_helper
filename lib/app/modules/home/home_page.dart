@@ -5,6 +5,7 @@ import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
 import 'package:lottie/lottie.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +17,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
-  //use 'controller' variable to access controller
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+
+  //! Use 'controller' variable to access controller
   @override
   void initState() {
     super.initState();
@@ -44,6 +48,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             if ((characters.length < 1) && 
                 (controller.activeEncounter.id == 0))  {
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   //! In the begging of the json file is set to start
                   //! the animation in second 153 DO NOT CHANGE
@@ -55,151 +60,146 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 ],
               ); 
             } else {
-              return ListView.builder(
-                itemCount: characters.length,
-                itemBuilder: (_, index) {
-                  return CharacterCard(
-                    controller: controller, character: characters[index]
-                  );
-                }
+              return ScrollConfiguration(
+                behavior: NoGlowingBehavior(),
+                child: ScrollablePositionedList.builder(
+                  itemPositionsListener: itemPositionsListener,
+                  itemScrollController: itemScrollController,
+                  itemCount: characters.length,
+                  itemBuilder: (_, index) {
+                    return CharacterCard(
+                      controller: controller, character: characters[index]
+                    );
+                  },
+                  physics: ClampingScrollPhysics(),
+                ),
               );
             } 
           }),
-          bottomSheet: Observer(
-            builder: (_) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
-                    child: FloatingActionButton(                    
-                      child: Icon(Icons.arrow_back_ios),
-                      onPressed: controller.activeEncounter.id == 0
-                      ? null
-                      : () {
-                        controller.backwardQueue();
-                      }
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(2, 0, 0, 8),
-                    child: FloatingActionButton(
-                      child: Icon(Icons.play_arrow),
-                      onPressed: controller.activeEncounter.id == 0
-                      ? null
-                      : () {
-                        controller.startQueue();
-                      }
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(2, 0, 2, 8),
-                    child: FloatingActionButton(
-                      child: Icon(Icons.arrow_forward_ios),
-                      onPressed: controller.activeEncounter.id == 0
-                      ? null
-                      : () {
-                        controller.fowardQueue();
-                      }
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 18, 8, 0),
-                      child: Text(
-                        controller.activeEncounter.currentTurn == 0 
-                        ? '' 
-                        : 'Turn : ' + controller.activeEncounter.currentTurn.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(2, 0, 8, 8),
-                    child: FloatingActionButton(
-                      child: Icon(Icons.add),
-                      //* When the app is starting it is not positioned in an encounter
-                      //* So the button should be disabled
-                      onPressed: controller.activeEncounter.id == 0
-                        ? null
-                        : () {
-                          showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) => CharacterEditDialog(
-                            controller: controller,
-                            encounterId: controller.activeEncounter.id
-                          ),
-                          );
-                        },
-                    ),
-                  )
-                ],
-              );
-            }
-          ),
-          // persistentFooterButtons: [
-          //   Observer(
-          //     builder: (_) {
-          //       return Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         mainAxisSize: MainAxisSize.max,
-          //         children: [
-          //           FloatingActionButton(
-          //             child: Icon(Icons.arrow_back_ios),
-          //             onPressed: controller.activeEncounter.id == 0
-          //             ? null
-          //             : () {
-          //               controller.backwardQueue();
-          //             }
-          //           ),
-          //           FloatingActionButton(
-          //             child: Icon(Icons.play_arrow),
-          //             onPressed: controller.activeEncounter.id == 0
-          //             ? null
-          //             : () {
-          //               controller.startQueue();
-          //             }
-          //           ),
-          //           FloatingActionButton(
-          //             child: Icon(Icons.arrow_forward_ios),
-          //             onPressed: controller.activeEncounter.id == 0
-          //             ? null
-          //             : () {
-          //               controller.fowardQueue();
-          //             }
-          //           ),
-          //           FloatingActionButton(
-          //             child: Icon(Icons.add),
-          //             //* When the app is starting it is not positioned in an encounter
-          //             //* So the button should be disabled
-          //             onPressed: controller.activeEncounter.id == 0
-          //               ? null
-          //               : () {
-          //                 showDialog(
-          //                 context: context,
-          //                 barrierDismissible: false,
-          //                 builder: (context) => CharacterEditDialog(
-          //                   controller: controller,
-          //                   encounterId: controller.activeEncounter.id
-          //                 ),
-          //                 );
-          //               },
-          //           )
-          //         ],
-          //       );
-          //     }
-          //   )
-          // ],
+          bottomNavigationBar: bottomButtons()
         ),
       ),
     );
+  }
+
+  Widget bottomButtons() {
+    return Observer(
+      builder: (_) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 2, 0, 4),
+              child: FloatingActionButton(                    
+                child: Icon(Icons.arrow_back_ios),
+                onPressed: controller.activeEncounter.currentTurn == 0
+                ? null
+                : () {
+                  int index = controller.backwardQueue();
+                  itemScrollController.scrollTo(
+                    index: index,
+                    duration: Duration(seconds: 1),
+                    curve: Curves.easeInOut
+                  );
+                }
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(2, 2, 0, 4),
+              child: FloatingActionButton(
+                child: controller.activeEncounter.currentTurn == 0
+                ? Icon(Icons.play_arrow)
+                : Icon(Icons.refresh),
+                onPressed: controller.activeEncounter.id == 0
+                ? null
+                : () {
+                  int index;
+                  if (controller.activeEncounter.currentTurn == 0)
+                  {
+                    index = controller.startQueue();
+                  } else {
+                    index = controller.restartQueue();
+                  }                        
+                  itemScrollController.scrollTo(
+                    index: index,
+                    duration: Duration(seconds: 1),
+                    curve: Curves.easeInOut
+                  );
+                }
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(2, 2, 2, 4),
+              child: FloatingActionButton(
+                child: Icon(Icons.arrow_forward_ios),
+                onPressed: controller.activeEncounter.currentTurn == 0
+                ? null
+                : () {
+                  int index;
+                  index = controller.fowardQueue();
+                  itemScrollController.scrollTo(
+                    index: index,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeOutExpo
+                  );
+                }
+              ),
+            ),
+            //? Hide when theres no turn
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(2, 2, 2, 4),
+                child: FloatingActionButton(
+                  isExtended: true,
+                  child: Text(
+                    controller.activeEncounter.currentTurn == 0 
+                    ? '' 
+                    : 'Turn : ' + controller.activeEncounter.currentTurn.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  onPressed: null,
+                )
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(2, 2, 8, 4),
+              child: FloatingActionButton(
+                child: Icon(Icons.add),
+                //* When the app is starting it is not positioned in an encounter
+                //* So the button should be disabled
+                onPressed: controller.activeEncounter.id == 0
+                  ? null
+                  : () {
+                    showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => CharacterEditDialog(
+                      controller: controller,
+                      encounterId: controller.activeEncounter.id
+                    ),
+                    );
+                  },
+              ),
+            )
+          ],
+        );
+      }
+    );  
+  }
+}
+
+//# Take the glowing affect in the end of the list
+class NoGlowingBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }

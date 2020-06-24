@@ -115,6 +115,17 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  void setCurrentTurn(int turn) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setCurrentTurn');
+    try {
+      return super.setCurrentTurn(turn);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Future<dynamic> getEncounters() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.getEncounters');
@@ -137,7 +148,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  void startQueue() {
+  int startQueue() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.startQueue');
     try {
@@ -148,7 +159,18 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  void fowardQueue() {
+  int restartQueue() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.restartQueue');
+    try {
+      return super.restartQueue();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int fowardQueue() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.fowardQueue');
     try {
@@ -159,7 +181,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  void backwardQueue() {
+  int backwardQueue() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.backwardQueue');
     try {

@@ -164,14 +164,27 @@ abstract class _HomeControllerBase with Store {
 
   //# QUEUE
   @action
-  void startQueue() {
+  int startQueue() {
     setCurrentTurn(1);
     charactersList[0].turn = true;
     orderCharacterList();
+    return 0;
   }
 
   @action
-  void fowardQueue() {
+  int restartQueue() {
+    int index = charactersList.indexWhere(
+      (c) => c.turn == true
+    );
+    charactersList[index].turn = false;
+    charactersList[0].turn = true;
+    setCurrentTurn(1);
+    orderCharacterList();
+    return 0;
+  }
+
+  @action
+  int fowardQueue() {
     // print('foward');
     int index = charactersList.indexWhere(
       (c) => c.turn == true
@@ -180,18 +193,21 @@ abstract class _HomeControllerBase with Store {
     //* When the old character is the last in the queue    
     if (index == (charactersList.length - 1)) {
       //* Restart the queue and increment the current turn
-      charactersList[index].turn = false;      
-      charactersList[0].turn = true;
+      charactersList[index].turn = false;
+      index = 0;      
+      charactersList[index].turn = true;
       setCurrentTurn((activeEncounter.currentTurn + 1));
     } else {
       charactersList[index].turn = false;
-      charactersList[(index + 1)].turn = true;      
+      index = index + 1; 
+      charactersList[(index)].turn = true;      
     }
     orderCharacterList();
+    return index;
   }
 
   @action
-  void backwardQueue() {
+  int backwardQueue() {
     // print('backward');
     int index = charactersList.indexWhere(
       (c) => c.turn == true
@@ -200,8 +216,10 @@ abstract class _HomeControllerBase with Store {
     //* When the old character is the first in the queue, don't retrocess
     if (index != 0) {      
       charactersList[index].turn = false;
-      charactersList[(index - 1)].turn = true;      
+      index = index - 1;
+      charactersList[(index)].turn = true;      
     }
     orderCharacterList();    
+    return index;
   }
 }
