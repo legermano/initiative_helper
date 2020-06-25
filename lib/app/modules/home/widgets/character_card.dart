@@ -3,6 +3,7 @@ import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
+import 'package:initiative_helper/colors/custom_colors.dart';
 
 class CharacterCard extends StatelessWidget {
   final HomeController controller;
@@ -69,7 +70,7 @@ class CharacterCard extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.delete), 
-              color: Colors.red[700],
+              color: CustomColor.red,
               onPressed: () {
                 controller.deleteCharacter(character);
               }

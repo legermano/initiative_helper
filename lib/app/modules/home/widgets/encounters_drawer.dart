@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/add_encounter_dialog.dart';
+import 'package:initiative_helper/colors/custom_colors.dart';
 import 'package:mobx/mobx.dart';
 
 class EncounterDrawer extends StatelessWidget {
@@ -27,7 +28,7 @@ class EncounterDrawer extends StatelessWidget {
                   .copyWith(color: Colors.white),
                 textAlign: TextAlign.center,  
               ),
-              decoration: BoxDecoration(color: Colors.red[700]),
+              decoration: BoxDecoration(color: CustomColor.red),
               margin: EdgeInsets.all(0),
             ),
           ),
@@ -135,7 +136,7 @@ class _EncounterDrawerEntry extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: IconButton(
                     icon: const Icon(Icons.delete_outline),
-                    color: Colors.red,
+                    color: CustomColor.red,
                     onPressed: () async {
                       final confirmed = await showDialog<bool>(
                         context: context,
@@ -155,7 +156,7 @@ class _EncounterDrawerEntry extends StatelessWidget {
                                   Navigator.pop(context, true);
                                 }, 
                                 child: const Text('Delete'),
-                                textColor: Colors.red,
+                                textColor: CustomColor.red,
                               )
                             ],
                           );

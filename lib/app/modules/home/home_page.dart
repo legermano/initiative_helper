@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
+import 'package:initiative_helper/colors/custom_colors.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'home_controller.dart';
@@ -30,7 +31,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red[700],
+      color: CustomColor.red,
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
