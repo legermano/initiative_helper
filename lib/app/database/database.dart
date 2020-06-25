@@ -32,19 +32,6 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (m) {
         return m.createAll();
       },
-      beforeOpen: (details) async{
-        if (details.wasCreated) {
-          final workId = await into(encounters)
-            .insert(const EncountersCompanion(description: Value('Combat')));
-
-          await into(characters).insert(CharactersCompanion(
-            name: const Value('Kobold'),
-            initiative: Value(10),
-            modifier: Value(0),
-            encounter: Value(workId)
-          ));  
-        }
-      },
     );
   }
 

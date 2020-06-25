@@ -67,7 +67,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       fit: FlexFit.loose,
                        child: FloatingActionButton.extended(
                         label: Text(
-                          'Choose an encounter',
+                          'Choose or create an encounter',
                           style: Theme.of(context).textTheme.headline6
                                  .merge(TextStyle(color: Colors.white))
                         ),

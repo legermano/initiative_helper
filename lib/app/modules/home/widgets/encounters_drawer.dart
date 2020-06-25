@@ -129,7 +129,7 @@ class _EncounterDrawerEntry extends StatelessWidget {
                         builder: (context) {
                           return AlertDialog(
                             title: const Text('Delete'),
-                            content: Text('Really delete category $title?'),
+                            content: Text('Really delete encounter $title?'),
                             actions: [
                               FlatButton(
                                 onPressed: () {
