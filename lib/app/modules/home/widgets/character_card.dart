@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
-import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
+import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
 import 'package:initiative_helper/colors/custom_colors.dart';
 
 class CharacterCard extends StatelessWidget {
@@ -64,7 +64,7 @@ class CharacterCard extends StatelessWidget {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (context) => CharacterEditDialog(controller: controller,character: character),
+                  builder: (context) => CharacterDialog(controller: controller,character: character),
                 );
               }
             ),

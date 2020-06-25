@@ -46,15 +46,7 @@ abstract class _HomeControllerBase with Store {
 
   @observable
   CurrentEncounter activeEncounter = CurrentEncounter(id: 0, description: '',currentTurn: 0);
-
-  // @computed
-  // ObservableList<CharacterWithInfo> get orderedCharacterList {
-  //   print("computed called");
-  //   charactersList.sort(
-  //     (a,b) => a.initiativeWithModifier.compareTo(b.initiativeWithModifier)
-  //   );        
-  //   return charactersList;
-  // } 
+  
   //# ENCOUNTERS
   @action
   void setActiveEncouter(int id,String description) => activeEncounter = 
@@ -96,7 +88,6 @@ abstract class _HomeControllerBase with Store {
   //# CHARACTERS
   @action
   void orderCharacterList() {
-    // print("order");
     List<CharacterWithInfo> ch = charactersList.toList();
     ch.sort((a,b) => a.initiativeWithModifier.compareTo(b.initiativeWithModifier));    
     charactersList = ch.asObservable();
@@ -124,8 +115,6 @@ abstract class _HomeControllerBase with Store {
     await _db.characterDao.deleteCharacter(character.character);
     charactersList.remove(character);
     orderCharacterList();
-    // final Encounter encounter = await _db.encounterDao.getEncounter(character.encounter);
-    // await getCharactersInEncounter(encounter);
   }
 
   @action
@@ -136,8 +125,6 @@ abstract class _HomeControllerBase with Store {
     );
     charactersList.replaceRange(index, (index + 1) , [character]);
     orderCharacterList();
-  //   final Encounter encounter = await _db.encounterDao.getEncounter(character.character.encounter);
-  //   await getCharactersInEncounter(encounter);
   }
 
   @action
@@ -158,8 +145,6 @@ abstract class _HomeControllerBase with Store {
       )
     );
     orderCharacterList();
-    // final Encounter encounter = await _db.encounterDao.getEncounter(encounterId);
-    // await getCharactersInEncounter(encounter);
   }
 
   //# QUEUE
@@ -185,7 +170,6 @@ abstract class _HomeControllerBase with Store {
 
   @action
   int fowardQueue() {
-    // print('foward');
     int index = charactersList.indexWhere(
       (c) => c.turn == true
     );
@@ -208,7 +192,6 @@ abstract class _HomeControllerBase with Store {
 
   @action
   int backwardQueue() {
-    // print('backward');
     int index = charactersList.indexWhere(
       (c) => c.turn == true
     );

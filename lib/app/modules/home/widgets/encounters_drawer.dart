@@ -117,20 +117,6 @@ class _EncounterDrawerEntry extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                //? Really needed
-                // Flexible(
-                //   flex: 1,
-                //   fit: FlexFit.tight,
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8),
-                //     child: Text(
-                //       'Combat encounter',
-                //       overflow: TextOverflow.ellipsis,
-                //       maxLines: 1,
-                //     ),
-                //   )
-                // ),
-                // Spacer(),
                 Flexible(
                   flex: 0,
                   fit: FlexFit.tight,

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
-import 'package:initiative_helper/app/modules/home/widgets/character_edit_dialog.dart';
+import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
 import 'package:initiative_helper/colors/custom_colors.dart';
+import 'package:initiative_helper/custom_animations/fade_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'home_controller.dart';
@@ -48,17 +49,33 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 controller.charactersList;
             if ((characters.length < 1) && 
                 (controller.activeEncounter.id == 0))  {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  //! In the begging of the json file is set to start
-                  //! the animation in second 153 DO NOT CHANGE
-                  Lottie.asset('assets/dice_red.json'),
-                  Text(
-                    'Choose an encounter',
-                    style: Theme.of(context).textTheme.headline6,
-                  )
-                ],
+              return Center(
+                child: Column(
+                  children: [
+                    //! In the begging of the json file is set to start
+                    //! the animation in second 153 DO NOT CHANGE
+                    Flexible(
+                      flex: 3,
+                      fit: FlexFit.tight,
+                      child: Lottie.asset(
+                        'assets/dice.json',
+                        fit: BoxFit.scaleDown
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.loose,
+                       child: FloatingActionButton.extended(
+                        label: Text(
+                          'Choose an encounter',
+                          style: Theme.of(context).textTheme.headline6
+                                 .merge(TextStyle(color: Colors.white))
+                        ),
+                        onPressed: null
+                      )
+                    )
+                  ],
+                ),
               ); 
             } else {
               return ScrollConfiguration(
@@ -147,28 +164,30 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 }
               ),
             ),
-            //? Hide when theres no turn
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(2, 2, 2, 4),
-                child: FloatingActionButton(
-                  isExtended: true,
-                  child: Text(
-                    controller.activeEncounter.currentTurn == 0 
-                    ? '' 
-                    : 'Turn : ' + controller.activeEncounter.currentTurn.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
+              child:  controller.activeEncounter.currentTurn == 0
+              ? SizedBox()
+              : FadeIn(
+                1.0,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(2, 2, 2, 4),
+                  child: FloatingActionButton(
+                    isExtended: true,
+                    child: Text(
+                      'Turn : ' + controller.activeEncounter.currentTurn.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  onPressed: null,
-                )
+                    onPressed: null,
+                  )
+                ),
               ),
-            ),
+            ),                        
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 2, 8, 4),
               child: FloatingActionButton(
@@ -181,7 +200,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) => CharacterEditDialog(
+                    builder: (context) => CharacterDialog(
                       controller: controller,
                       encounterId: controller.activeEncounter.id
                     ),

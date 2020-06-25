@@ -8,20 +8,20 @@ import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:moor/moor.dart' as moor ;
 import 'package:numberpicker/numberpicker.dart';
 
-class CharacterEditDialog extends StatefulWidget {
+class CharacterDialog extends StatefulWidget {
   final HomeController controller;
   //? If is editing an existing character
   final CharacterWithInfo character;
   //? If is creating a new character
   final int encounterId;
   
-  const CharacterEditDialog({Key key,this.controller, this.character, this.encounterId}) : super(key: key);
+  const CharacterDialog({Key key,this.controller, this.character, this.encounterId}) : super(key: key);
 
   @override
-  _CharacterEditDialogState createState() => _CharacterEditDialogState();
+  _CharacterDialogState createState() => _CharacterDialogState();
 }
 
-class _CharacterEditDialogState extends State<CharacterEditDialog> {  
+class _CharacterDialogState extends State<CharacterDialog> {  
   HomeController controller;
 
   final TextEditingController _nameController = TextEditingController();
@@ -73,7 +73,10 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Edit character'),
+      title: Text( isCreating
+        ? 'Crate character'
+        : 'Edit character'
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
