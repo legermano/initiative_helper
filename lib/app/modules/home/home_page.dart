@@ -58,7 +58,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       flex: 3,
                       fit: FlexFit.tight,
                       child: Lottie.asset(
-                        'assets/dice.json',
+                        'assets/animations/dice.json',
                         fit: BoxFit.scaleDown
                       ),
                     ),
