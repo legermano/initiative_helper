@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
@@ -16,25 +15,12 @@ class CharacterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Character ch = character.character;
     return Card(
+      color: character.turn ? Colors.amber[100] : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Expanded(
-              flex: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: character.turn ?
-                Icon(
-                  //? Maybe dice FontAwesome5.dice                  
-                  RpgAwesome.broadsword,
-                  color: Colors.amberAccent,
-                  size: 24,
-                )
-                : SizedBox(width: 24)
-              )
-            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -73,6 +73,7 @@ class _CharacterDialogState extends State<CharacterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       title: Text( isCreating
         ? 'Crate character'
         : 'Edit character'

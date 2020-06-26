@@ -22,6 +22,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   //! Use 'controller' variable to access controller
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       color: CustomColor.red,
       child: SafeArea(
         child: Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             title: Observer(builder: (_) {
               return Text(
@@ -71,7 +74,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                           style: Theme.of(context).textTheme.headline6
                                  .merge(TextStyle(color: Colors.white))
                         ),
-                        onPressed: null
+                        onPressed: () {
+                          _scaffoldKey.currentState.openDrawer();
+                        }
                       )
                     )
                   ],
