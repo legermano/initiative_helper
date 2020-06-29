@@ -7,8 +7,25 @@ part 'home_controller.g.dart';
 class CurrentEncounter {
   int id;
   String description;
+  int currentTurn;
 
-  CurrentEncounter({@required this.id, @required this.description});
+  CurrentEncounter({
+    @required this.id, 
+    @required this.description,
+    @required this.currentTurn
+  });
+}
+
+class CharacterWithInfo {
+  Character character;
+  int initiativeWithModifier;
+  bool turn;
+
+  CharacterWithInfo({
+    @required this.character,
+    @required this.initiativeWithModifier,
+    @required this.turn
+  });
 }
 
 class HomeController = _HomeControllerBase with _$HomeController;
@@ -21,23 +38,28 @@ abstract class _HomeControllerBase with Store {
   AppDatabase _db;
 
   @observable
-  ObservableFuture<List<Character>> charactersList = ObservableFuture.value([]);
+  ObservableList<CharacterWithInfo> charactersList = ObservableList<CharacterWithInfo>();
 
+  //? Change the encounter list to a ObservabelList too?
   @observable
   ObservableFuture<List<Encounter>> encountersList = ObservableFuture.value([]);
 
   @observable
-  CurrentEncounter activeEncounter = CurrentEncounter(id: 0, description: 'Choose an encounter');
-
-  // @action
-  // Future<List<Encounter>> getEncounters() async{
-  //   return encountersList = _db.encounterDao.allEncounters().asObservable();
-    
-  // }  
-
+  CurrentEncounter activeEncounter = CurrentEncounter(id: 0, description: '',currentTurn: 0);
+  
+  //# ENCOUNTERS
   @action
   void setActiveEncouter(int id,String description) => activeEncounter = 
-    CurrentEncounter(id: id, description: description);
+    CurrentEncounter(id: id, description: description,currentTurn: 0);
+
+  @action
+  void setCurrentTurn(int turn) {
+    activeEncounter = CurrentEncounter(
+      id: activeEncounter.id, 
+      description: activeEncounter.description, 
+      currentTurn: turn
+    );
+  }  
 
   @action
   Future getEncounters() => encountersList =
@@ -48,8 +70,8 @@ abstract class _HomeControllerBase with Store {
     //If the active encounter is the one getting deleted
     //reset the characters list
     if (encounter.id == activeEncounter.id) {
-      setActiveEncouter(0, 'Choose an encounter');
-      charactersList = ObservableFuture.value([]);
+      setActiveEncouter(0, '');
+      charactersList.clear();
     }
     //Delete the encounter
     _db.encounterDao.deleteEncounter(encounter);    
@@ -63,35 +85,124 @@ abstract class _HomeControllerBase with Store {
     return id;
   }
 
-  // @action
-  // Future<List<Character>> getCharactersInEncounter(Encounter encounter) {
-  //   return charactersList = _db.characterDao.charactersInEncounter(encounter).asObservable();
-  // }
+  //# CHARACTERS
+  @action
+  void orderCharacterList() {
+    List<CharacterWithInfo> ch = charactersList.toList();
+    ch.sort((a,b) => a.initiativeWithModifier.compareTo(b.initiativeWithModifier));    
+    charactersList = ch.asObservable();
+    // for (var c in charactersList) {
+    //   print( c.character.name +'|'+ c.initiativeWithModifier.toString()+'|turn : '+c.turn.toString());
+    // }
+  }  
 
-  Future getCharactersInEncounter(Encounter encounter) { 
+  Future getCharactersInEncounter(Encounter encounter) async{ 
     setActiveEncouter(encounter.id,encounter.description);
-    return charactersList =
-      ObservableFuture(_db.characterDao.charactersInEncounter(encounter));
+    List<Character> charactes =
+      await _db.characterDao.charactersInEncounter(encounter);
+    charactersList = charactes.map(
+      (e) => CharacterWithInfo(
+        character: e, 
+        initiativeWithModifier: (e.initiative + e.modifier), 
+        turn: false
+      )
+    ).toList().asObservable();
+    orderCharacterList();
   }
 
   @action
-  Future deleteCharacter(Character character) async {
-    await _db.characterDao.deleteCharacter(character);
-    final Encounter encounter = await _db.encounterDao.getEncounter(character.encounter);
-    await getCharactersInEncounter(encounter);
+  Future deleteCharacter(CharacterWithInfo character) async {
+    await _db.characterDao.deleteCharacter(character.character);
+    charactersList.remove(character);
+    orderCharacterList();
   }
 
   @action
-  Future updateCharacter(Character characters,int encounterId) async {
-    await _db.characterDao.updateCharacter(characters);
-    final Encounter encounter = await _db.encounterDao.getEncounter(encounterId);
-    await getCharactersInEncounter(encounter);
+  Future updateCharacter(CharacterWithInfo character) async {
+    await _db.characterDao.updateCharacter(character.character);
+    int index = charactersList.indexWhere(
+      (c) => c.character.id == character.character.id
+    );
+    charactersList.replaceRange(index, (index + 1) , [character]);
+    orderCharacterList();
   }
 
   @action
   Future addCharacter(CharactersCompanion charactersCompanion, int encounterId) async {
-    await _db.characterDao.createCharacter(charactersCompanion);
-    final Encounter encounter = await _db.encounterDao.getEncounter(encounterId);
-    await getCharactersInEncounter(encounter);
+    int id = await _db.characterDao.createCharacter(charactersCompanion);
+    charactersList.add(
+      CharacterWithInfo(
+        character: Character(
+          id: id, 
+          encounter: charactersCompanion.encounter.value, 
+          name: charactersCompanion.name.value, 
+          initiative: charactersCompanion.initiative.value,
+          modifier: charactersCompanion.modifier.value
+        ), 
+        initiativeWithModifier: 
+          (charactersCompanion.initiative.value + charactersCompanion.modifier.value), 
+        turn: false
+      )
+    );
+    orderCharacterList();
+  }
+
+  //# QUEUE
+  @action
+  int startQueue() {
+    setCurrentTurn(1);
+    charactersList[0].turn = true;
+    orderCharacterList();
+    return 0;
+  }
+
+  @action
+  int restartQueue() {
+    int index = charactersList.indexWhere(
+      (c) => c.turn == true
+    );
+    charactersList[index].turn = false;
+    charactersList[0].turn = true;
+    setCurrentTurn(1);
+    orderCharacterList();
+    return 0;
+  }
+
+  @action
+  int fowardQueue() {
+    int index = charactersList.indexWhere(
+      (c) => c.turn == true
+    );
+
+    //* When the old character is the last in the queue    
+    if (index == (charactersList.length - 1)) {
+      //* Restart the queue and increment the current turn
+      charactersList[index].turn = false;
+      index = 0;      
+      charactersList[index].turn = true;
+      setCurrentTurn((activeEncounter.currentTurn + 1));
+    } else {
+      charactersList[index].turn = false;
+      index = index + 1; 
+      charactersList[(index)].turn = true;      
+    }
+    orderCharacterList();
+    return index;
+  }
+
+  @action
+  int backwardQueue() {
+    int index = charactersList.indexWhere(
+      (c) => c.turn == true
+    );
+
+    //* When the old character is the first in the queue, don't retrocess
+    if (index != 0) {      
+      charactersList[index].turn = false;
+      index = index - 1;
+      charactersList[(index)].turn = true;      
+    }
+    orderCharacterList();    
+    return index;
   }
 }

@@ -48,6 +48,7 @@ class _AddEncounterDialogState extends State<AddEncounterDialog> {
                 labelText: 'Name of the encounter'
               ),
               onSubmitted: (_) => _addEncounter(),
+              textCapitalization: TextCapitalization.sentences,
             ),
             ButtonBar(
               children: [

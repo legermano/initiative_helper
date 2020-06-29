@@ -12,13 +12,13 @@ mixin _$HomeController on _HomeControllerBase, Store {
   final _$charactersListAtom = Atom(name: '_HomeControllerBase.charactersList');
 
   @override
-  ObservableFuture<List<Character>> get charactersList {
+  ObservableList<CharacterWithInfo> get charactersList {
     _$charactersListAtom.reportRead();
     return super.charactersList;
   }
 
   @override
-  set charactersList(ObservableFuture<List<Character>> value) {
+  set charactersList(ObservableList<CharacterWithInfo> value) {
     _$charactersListAtom.reportWrite(value, super.charactersList, () {
       super.charactersList = value;
     });
@@ -76,7 +76,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
       AsyncAction('_HomeControllerBase.deleteCharacter');
 
   @override
-  Future<dynamic> deleteCharacter(Character character) {
+  Future<dynamic> deleteCharacter(CharacterWithInfo character) {
     return _$deleteCharacterAsyncAction
         .run(() => super.deleteCharacter(character));
   }
@@ -85,9 +85,9 @@ mixin _$HomeController on _HomeControllerBase, Store {
       AsyncAction('_HomeControllerBase.updateCharacter');
 
   @override
-  Future<dynamic> updateCharacter(Character characters, int encounterId) {
+  Future<dynamic> updateCharacter(CharacterWithInfo character) {
     return _$updateCharacterAsyncAction
-        .run(() => super.updateCharacter(characters, encounterId));
+        .run(() => super.updateCharacter(character));
   }
 
   final _$addCharacterAsyncAction =
@@ -115,11 +115,77 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  void setCurrentTurn(int turn) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setCurrentTurn');
+    try {
+      return super.setCurrentTurn(turn);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Future<dynamic> getEncounters() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.getEncounters');
     try {
       return super.getEncounters();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void orderCharacterList() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.orderCharacterList');
+    try {
+      return super.orderCharacterList();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int startQueue() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.startQueue');
+    try {
+      return super.startQueue();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int restartQueue() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.restartQueue');
+    try {
+      return super.restartQueue();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int fowardQueue() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.fowardQueue');
+    try {
+      return super.fowardQueue();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int backwardQueue() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.backwardQueue');
+    try {
+      return super.backwardQueue();
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }

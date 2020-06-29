@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:initiative_helper/colors/custom_colors.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -9,7 +10,7 @@ class AppWidget extends StatelessWidget {
       navigatorKey: Modular.navigatorKey,
       title: 'Initiative Helper',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: CustomColor.red,
         // use the good-looking updated material text style
         typography: Typography.material2018(
             englishLike: Typography.englishLike2018,

@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/add_encounter_dialog.dart';
+import 'package:initiative_helper/colors/custom_colors.dart';
 import 'package:mobx/mobx.dart';
 
 class EncounterDrawer extends StatelessWidget {
@@ -27,7 +28,7 @@ class EncounterDrawer extends StatelessWidget {
                   .copyWith(color: Colors.white),
                 textAlign: TextAlign.center,  
               ),
-              decoration: BoxDecoration(color: Colors.red[700]),
+              decoration: BoxDecoration(color: CustomColor.red),
               margin: EdgeInsets.all(0),
             ),
           ),
@@ -102,43 +103,33 @@ class _EncounterDrawerEntry extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(6),
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Flexible(
-                  fit: FlexFit.loose,
-                  flex: 0,
+                  fit: FlexFit.tight,
+                  flex: 1,
                   child: Text(
                     title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).accentColor
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      'Combat encounter',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  )
-                ),
-                // Spacer(),
-                Flexible(
                   flex: 0,
+                  fit: FlexFit.tight,
                   child: IconButton(
                     icon: const Icon(Icons.delete_outline),
-                    color: Colors.red,
+                    color: CustomColor.red,
                     onPressed: () async {
                       final confirmed = await showDialog<bool>(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
                             title: const Text('Delete'),
-                            content: Text('Really delete category $title?'),
+                            content: Text('Really delete encounter $title?'),
                             actions: [
                               FlatButton(
                                 onPressed: () {
@@ -151,7 +142,7 @@ class _EncounterDrawerEntry extends StatelessWidget {
                                   Navigator.pop(context, true);
                                 }, 
                                 child: const Text('Delete'),
-                                textColor: Colors.red,
+                                textColor: CustomColor.red,
                               )
                             ],
                           );

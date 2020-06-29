@@ -34,6 +34,9 @@ dependencies:
   numberpicker: ^1.2.0
   d20: ^0.2.0+test-github-actions-1
   fluttericon: ^1.0.7
+  lottie: ^0.4.0+1
+  scrollable_positioned_list: ^0.1.6
+  simple_animations: ^2.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -46,9 +49,18 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   moor_generator: ^3.1.0
+  flutter_launcher_icons:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon-1024.png"
+  image_path_android: "assets/launcher/icon-512.png"
+  adaptive_icon_background: "assets/launcher/background.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"
 
 # The following section is specific to Flutter.
 flutter:
@@ -57,6 +69,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/animations/
+    - assets/launcher/
+    
 scripts: 
 
     mobx_watch: flutter clean & flutter pub get & flutter pub run build_runner watch --delete-conflicting-outputs
