@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:initiative_helper/app/database/database.dart';
+import 'package:initiative_helper/app/database/platforms/shared.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home_controller.g.dart';
@@ -32,7 +33,7 @@ class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
   _HomeControllerBase() {
-    _db = AppDatabase();        
+    _db = constructDb();        
   }
 
   AppDatabase _db;
