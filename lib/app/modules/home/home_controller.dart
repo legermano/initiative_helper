@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:initiative_helper/app/database/database.dart';
+import 'package:initiative_helper/app/database/platforms/shared.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home_controller.g.dart';
@@ -32,7 +33,7 @@ class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
   _HomeControllerBase() {
-    _db = AppDatabase();        
+    _db = constructDb();        
   }
 
   AppDatabase _db;
@@ -89,7 +90,7 @@ abstract class _HomeControllerBase with Store {
   @action
   void orderCharacterList() {
     List<CharacterWithInfo> ch = charactersList.toList();
-    ch.sort((a,b) => a.initiativeWithModifier.compareTo(b.initiativeWithModifier));    
+    ch.sort((a,b) => b.initiativeWithModifier.compareTo(a.initiativeWithModifier));    
     charactersList = ch.asObservable();
     // for (var c in charactersList) {
     //   print( c.character.name +'|'+ c.initiativeWithModifier.toString()+'|turn : '+c.turn.toString());
