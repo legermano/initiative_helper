@@ -90,7 +90,7 @@ abstract class _HomeControllerBase with Store {
   @action
   void orderCharacterList() {
     List<CharacterWithInfo> ch = charactersList.toList();
-    ch.sort((a,b) => a.initiativeWithModifier.compareTo(b.initiativeWithModifier));    
+    ch.sort((a,b) => b.initiativeWithModifier.compareTo(a.initiativeWithModifier));    
     charactersList = ch.asObservable();
     // for (var c in charactersList) {
     //   print( c.character.name +'|'+ c.initiativeWithModifier.toString()+'|turn : '+c.turn.toString());
