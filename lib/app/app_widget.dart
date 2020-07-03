@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:initiative_helper/colors/custom_colors.dart';
+import 'package:initiative_helper/theme/custom_themes.dart';
+import 'package:initiative_helper/theme/theme_notifier.dart';
 
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      navigatorKey: Modular.navigatorKey,
-      title: 'Initiative Helper',
-      theme: ThemeData(
-        primarySwatch: CustomColor.red,
-        // use the good-looking updated material text style
-        typography: Typography.material2018(
-            englishLike: Typography.englishLike2018,
-            dense: Typography.dense2018,
-            tall: Typography.tall2018,
-        ), 
-      ),
-      initialRoute: '/',
-      onGenerateRoute: Modular.generateRoute,
+    return Consumer<ThemeNotifier>(
+      builder: (context, value) {      
+        print(value.getTheme());
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          navigatorKey: Modular.navigatorKey,
+          title: 'Initiative Helper',
+          theme: value.getTheme(),
+          // darkTheme: darkTheme,
+          initialRoute: '/',
+          onGenerateRoute: Modular.generateRoute,
+        );
+      }
     );
   }
 }

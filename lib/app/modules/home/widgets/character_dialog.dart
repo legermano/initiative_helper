@@ -116,13 +116,12 @@ class _CharacterDialogState extends State<CharacterDialog> {
                   ),
                   Text(
                     'Initiative value',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
                   ),
                   IconButton(
-                    icon: Icon(FontAwesome5.dice_d20), 
+                    icon: Icon(
+                      FontAwesome5.dice_d20,
+                      color: Theme.of(context).primaryColor
+                    ),
                     onPressed: () {
                       final d20 = D20().roll('1d20');
                       setState(() => initiativeValue = d20);
@@ -142,14 +141,13 @@ class _CharacterDialogState extends State<CharacterDialog> {
                   ),
                   Text(
                     'Modifier value',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
                     textAlign: TextAlign.center,
                   ),
                   IconButton(
-                    icon: Icon(FontAwesome5.dice_d20), 
+                    icon: Icon(
+                      FontAwesome5.dice_d20,
+                      color: Theme.of(context).primaryColor,
+                    ), 
                     onPressed: () {
                       final d20 = D20().roll('1d20');
                       setState(() => modifierValue = d20);
@@ -164,14 +162,23 @@ class _CharacterDialogState extends State<CharacterDialog> {
       ),
       actions: [
         FlatButton(
-          child: const Text('Cancel'),
-          textColor: Colors.black,
+          child: Text(
+            'Cancel',
+            style: Theme.of(context).textTheme.button.copyWith(
+              color: Theme.of(context).primaryColor
+            ),
+          ),
           onPressed: () {
             Navigator.pop(context);
           }, 
         ),
         FlatButton(
-          child: const Text('Save'),
+          child: Text(
+            'Save',
+            style: Theme.of(context).textTheme.button.copyWith(
+              color: Theme.of(context).primaryColor
+            ),
+          ),
           onPressed: () {
             if (_formKey.currentState.validate()) {
               if (isCreating) {

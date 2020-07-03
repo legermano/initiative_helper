@@ -4,7 +4,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
-import 'package:initiative_helper/colors/custom_colors.dart';
 import 'package:initiative_helper/animations/fade_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -34,7 +33,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: CustomColor.red,
+      color: Theme.of(context).primaryColor,
       child: SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
@@ -43,6 +42,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return Text(
                 controller.activeEncounter.description,
                 overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.headline6,
               );
             }),
           ),
@@ -192,7 +192,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   )
                 ),
               ),
-            ),                        
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 2, 8, 4),
               child: FloatingActionButton(
@@ -216,7 +216,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           ],
         );
       }
-    );  
+    );
   }
 }
 

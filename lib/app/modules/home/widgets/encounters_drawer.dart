@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/add_encounter_dialog.dart';
-import 'package:initiative_helper/colors/custom_colors.dart';
 import 'package:mobx/mobx.dart';
 
 class EncounterDrawer extends StatelessWidget {
@@ -28,7 +27,7 @@ class EncounterDrawer extends StatelessWidget {
                   .copyWith(color: Colors.white),
                 textAlign: TextAlign.center,  
               ),
-              decoration: BoxDecoration(color: CustomColor.red),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               margin: EdgeInsets.all(0),
             ),
           ),
@@ -93,7 +92,9 @@ class _EncounterDrawerEntry extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(9, 4, 9, 0),
       child: Material(
-        color: (encounter.id == controller.activeEncounter.id) ? Colors.amber[100] : Colors.transparent,
+        color: (encounter.id == controller.activeEncounter.id) 
+          ? Theme.of(context).selectedRowColor 
+          : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           onTap: () {
@@ -122,7 +123,7 @@ class _EncounterDrawerEntry extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: IconButton(
                     icon: const Icon(Icons.delete_outline),
-                    color: CustomColor.red,
+                    color: Theme.of(context).primaryColor,
                     onPressed: () async {
                       final confirmed = await showDialog<bool>(
                         context: context,
@@ -142,7 +143,7 @@ class _EncounterDrawerEntry extends StatelessWidget {
                                   Navigator.pop(context, true);
                                 }, 
                                 child: const Text('Delete'),
-                                textColor: CustomColor.red,
+                                textColor: Theme.of(context).primaryColor,
                               )
                             ],
                           );

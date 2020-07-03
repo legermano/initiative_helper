@@ -3,9 +3,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
-import 'package:initiative_helper/colors/custom_colors.dart';
-
-import '../../../../colors/custom_colors.dart';
 
 class CharacterCard extends StatelessWidget {
   final HomeController controller;
@@ -19,7 +16,10 @@ class CharacterCard extends StatelessWidget {
     Character ch = character.character;
 
     return Card(
-      color: character.turn ? Colors.amber[100] : Colors.white,
+      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+      color: character.turn 
+        ? Theme.of(context).selectedRowColor
+        : Theme.of(context).cardColor,
       child: Slidable(   
         key: Key(ch.id.toString()),
         actionPane: SlidableDrawerActionPane(),
@@ -29,7 +29,7 @@ class CharacterCard extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded( 
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(
@@ -73,7 +73,7 @@ class CharacterCard extends StatelessWidget {
           ),
           IconSlideAction(
             caption: 'Delete',
-            color: CustomColor.red,
+            color: Theme.of(context).primaryColor,
             icon: Icons.delete,
             onTap: () => controller.deleteCharacter(character),
           )
