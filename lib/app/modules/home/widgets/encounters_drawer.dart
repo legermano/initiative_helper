@@ -1,3 +1,4 @@
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:initiative_helper/app/database/database.dart';
@@ -70,6 +71,14 @@ class EncounterDrawer extends StatelessWidget {
                     builder: (_) => AddEncounterDialog(controller: controller,),
                   );
                 },
+              ),
+              IconButton(
+                icon: Icon(Icons.lightbulb_outline), 
+                onPressed: () => DynamicTheme.of(context).setBrightness(
+                  Theme.of(context).brightness == Brightness.dark
+                    ? Brightness.light
+                    : Brightness.dark
+                )
               )
             ],
           )

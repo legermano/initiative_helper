@@ -1,3 +1,4 @@
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -28,6 +29,16 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   void initState() {
     super.initState();
     controller.getEncounters();
+
+    final window = WidgetsBinding.instance.window;    
+
+    window.onPlatformBrightnessChanged = () {
+      final brightness = window.platformBrightness;
+      DynamicTheme.of(context).setBrightness(brightness == Brightness.light
+        ? Brightness.light
+        : Brightness.dark
+      );
+    };
   }
 
   @override
