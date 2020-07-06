@@ -61,6 +61,7 @@ class EncounterDrawer extends StatelessWidget {
             )
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FlatButton(
                 child: const Text('Add encounter'),

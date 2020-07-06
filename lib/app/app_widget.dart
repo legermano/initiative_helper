@@ -22,7 +22,6 @@ class AppWidget extends StatelessWidget {
           navigatorKey: Modular.navigatorKey,
           title: 'Initiative Helper',
           theme: data,
-          // darkTheme: darkTheme,
           initialRoute: '/',
           onGenerateRoute: Modular.generateRoute,
         );

@@ -42,8 +42,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) {    
+    return Container(      
       color: Theme.of(context).primaryColor,
       child: SafeArea(
         child: Scaffold(
@@ -53,7 +53,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return Text(
                 controller.activeEncounter.description,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6
+                       .copyWith(color: Colors.white),
               );
             }),
           ),
