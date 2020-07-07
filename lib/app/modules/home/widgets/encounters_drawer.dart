@@ -8,82 +8,96 @@ import 'package:mobx/mobx.dart';
 
 class EncounterDrawer extends StatelessWidget {
   final HomeController controller;
+  final bool displayMobileLayout;
 
-  EncounterDrawer({Key key, @required this.controller}) : super(key: key);
+  EncounterDrawer({
+    Key key, 
+    @required this.controller,
+    @required this.displayMobileLayout
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            height: 50,
-            child: DrawerHeader(
-              child: Text(
-                'List of all encounters',
-                style: Theme.of(context)
-                  .textTheme
-                  .subtitle1
-                  .copyWith(color: Colors.white),
-                textAlign: TextAlign.center,  
-              ),
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              margin: EdgeInsets.all(0),
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Observer(
-              builder: (_){
-                switch (controller.encountersList.status) {
-                  case FutureStatus.pending:
-                    return const LinearProgressIndicator();
-                    break;
-                  case FutureStatus.fulfilled:
-                    final List<Encounter> encounters = controller.encountersList.value;
-                    return ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: encounters.length,
-                      itemBuilder: (_,index) {
-                        return _EncounterDrawerEntry(
-                          encounter: encounters[index], 
-                          controller: controller
-                        );
-                      }
-                    );
-                    break;  
-                  default:
-                    return Container();
-                    break;
-                }
-              }
-            )
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: SafeArea(
+        child: Drawer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              FlatButton(
-                child: const Text('Add encounter'),
-                textColor: Theme.of(context).accentColor,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AddEncounterDialog(controller: controller,),
-                  );
-                },
+              SizedBox(
+                height: 56,
+                child: DrawerHeader(
+                  child: Text(
+                    'List of all encounters',
+                    style: Theme.of(context)
+                      .textTheme
+                      .subtitle1
+                      .copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,  
+                  ),
+                  decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+                  margin: EdgeInsets.all(0),
+                ),
               ),
-              IconButton(
-                icon: Icon(Icons.lightbulb_outline), 
-                onPressed: () => DynamicTheme.of(context).setBrightness(
-                  Theme.of(context).brightness == Brightness.dark
-                    ? Brightness.light
-                    : Brightness.dark
+              Flexible(
+                flex: 1,
+                child: Observer(
+                  builder: (_){
+                    switch (controller.encountersList.status) {
+                      case FutureStatus.pending:
+                        return const LinearProgressIndicator();
+                        break;
+                      case FutureStatus.fulfilled:
+                        final List<Encounter> encounters = controller.encountersList.value;
+                        return ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: encounters.length,
+                          itemBuilder: (_,index) {
+                            return _EncounterDrawerEntry(
+                              encounter: encounters[index], 
+                              controller: controller,
+                              diplayMobileLayout: displayMobileLayout,
+                            );
+                          }
+                        );
+                        break;  
+                      default:
+                        return Container();
+                        break;
+                    }
+                  }
                 )
-              )
-            ],
-          )
-        ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FlatButton(
+                    child: const Text('Add encounter'),
+                    textColor: Theme.of(context).accentColor,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AddEncounterDialog(controller: controller,),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    icon: Icon(Icons.lightbulb_outline), 
+                    onPressed: () => DynamicTheme.of(context).setBrightness(
+                      Theme.of(context).brightness == Brightness.dark
+                        ? Brightness.light
+                        : Brightness.dark
+                    )
+                  )
+                ],
+              ),
+            ],        
+          ),
+        ),
       ),
     );
   }
@@ -92,8 +106,14 @@ class EncounterDrawer extends StatelessWidget {
 class _EncounterDrawerEntry extends StatelessWidget {
   final Encounter encounter;
   final HomeController controller;
+  final bool diplayMobileLayout;
 
-  const _EncounterDrawerEntry({Key key, @required this.encounter, @required this.controller}) : super(key: key);
+  const _EncounterDrawerEntry({
+    Key key, 
+    @required this.encounter, 
+    @required this.controller,
+    @required this.diplayMobileLayout
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +129,8 @@ class _EncounterDrawerEntry extends StatelessWidget {
         child: InkWell(
           onTap: () {
             controller.getCharactersInEncounter(encounter);
-            Navigator.pop(context); //close the navigation drawer
+            if (diplayMobileLayout)
+              Navigator.pop(context); //close the navigation drawer
           },
           child: Padding(
             padding: const EdgeInsets.all(6),

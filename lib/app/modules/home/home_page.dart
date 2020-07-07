@@ -30,8 +30,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     super.initState();
     controller.getEncounters();
 
+    //* Listening  to the device theme change
     final window = WidgetsBinding.instance.window;    
-
     window.onPlatformBrightnessChanged = () {
       final brightness = window.platformBrightness;
       DynamicTheme.of(context).setBrightness(brightness == Brightness.light
@@ -43,77 +43,95 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   @override
   Widget build(BuildContext context) {    
-    return Container(      
-      color: Theme.of(context).primaryColor,
-      child: SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            title: Observer(builder: (_) {
-              return Text(
-                controller.activeEncounter.description,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline6
-                       .copyWith(color: Colors.white),
-              );
-            }),
+    final bool displayMobileLayout = MediaQuery.of(context).size.width < 700;
+    return Row(
+      children: [
+        if (!displayMobileLayout)
+          EncounterDrawer(
+            controller: controller,
+            displayMobileLayout: displayMobileLayout,
           ),
-          drawer: EncounterDrawer(controller: controller),
-          body: Observer(builder: (_) {
-            final List<CharacterWithInfo> characters =
-                controller.charactersList;
-            if ((characters.length < 1) && 
-                (controller.activeEncounter.id == 0))  {
-              return Center(
-                child: Column(
-                  children: [
-                    //! In the begging of the json file is set to start
-                    //! the animation in second 153 DO NOT CHANGE
-                    Flexible(
-                      flex: 3,
-                      fit: FlexFit.tight,
-                      child: Lottie.asset(
-                        'assets/animations/dice.json',
-                        fit: BoxFit.scaleDown
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.loose,
-                       child: FloatingActionButton.extended(
-                        label: Text(
-                          'Choose or create an encounter',
-                          style: Theme.of(context).textTheme.headline6
-                                 .merge(TextStyle(color: Colors.white))
-                        ),
-                        onPressed: () {
-                          _scaffoldKey.currentState.openDrawer();
-                        }
-                      )
-                    )
-                  ],
-                ),
-              ); 
-            } else {
-              return ScrollConfiguration(
-                behavior: NoGlowingBehavior(),
-                child: ScrollablePositionedList.builder(
-                  itemPositionsListener: itemPositionsListener,
-                  itemScrollController: itemScrollController,
-                  itemCount: characters.length,
-                  itemBuilder: (_, index) {
-                    return CharacterCard(
-                      controller: controller, character: characters[index]
+        Expanded(
+          flex: 1,
+          child: Container(      
+            color: Theme.of(context).primaryColor,
+            child: SafeArea(
+              child: Scaffold(
+                key: _scaffoldKey,
+                appBar: AppBar(
+                  title: Observer(builder: (_) {
+                    return Text(
+                      controller.activeEncounter.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.headline6
+                             .copyWith(color: Colors.white),
                     );
-                  },
-                  physics: ClampingScrollPhysics(),
+                  }),
                 ),
-              );
-            } 
-          }),
-          bottomNavigationBar: bottomButtons()
+                drawer: displayMobileLayout 
+                  ? EncounterDrawer(
+                      controller: controller,
+                      displayMobileLayout: displayMobileLayout,
+                    )
+                  : null,
+                body: Observer(builder: (_) {
+                  final List<CharacterWithInfo> characters =
+                      controller.charactersList;
+                  if ((characters.length < 1) && 
+                      (controller.activeEncounter.id == 0))  {
+                    return Center(
+                      child: Column(
+                        children: [
+                          //! In the begging of the json file is set to start
+                          //! the animation in second 153 DO NOT CHANGE
+                          Flexible(
+                            flex: 3,
+                            fit: FlexFit.tight,
+                            child: Lottie.asset(
+                              'assets/animations/dice.json',
+                              fit: BoxFit.scaleDown
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.loose,
+                             child: FloatingActionButton.extended(
+                              label: Text(
+                                'Choose or create an encounter',
+                                style: Theme.of(context).textTheme.headline6
+                                       .merge(TextStyle(color: Colors.white))
+                              ),
+                              onPressed: () {
+                                _scaffoldKey.currentState.openDrawer();
+                              }
+                            )
+                          )
+                        ],
+                      ),
+                    ); 
+                  } else {
+                    return ScrollConfiguration(
+                      behavior: NoGlowingBehavior(),
+                      child: ScrollablePositionedList.builder(
+                        itemPositionsListener: itemPositionsListener,
+                        itemScrollController: itemScrollController,
+                        itemCount: characters.length,
+                        itemBuilder: (_, index) {
+                          return CharacterCard(
+                            controller: controller, character: characters[index]
+                          );
+                        },
+                        physics: ClampingScrollPhysics(),
+                      ),
+                    );
+                  } 
+                }),
+                bottomNavigationBar: bottomButtons()
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -215,12 +233,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   ? null
                   : () {
                     showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => CharacterDialog(
-                      controller: controller,
-                      encounterId: controller.activeEncounter.id
-                    ),
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => CharacterDialog(
+                        controller: controller,
+                        encounterId: controller.activeEncounter.id
+                      ),
                     );
                   },
               ),

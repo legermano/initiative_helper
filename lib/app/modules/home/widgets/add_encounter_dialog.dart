@@ -28,40 +28,30 @@ class _AddEncounterDialogState extends State<AddEncounterDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
+    return AlertDialog(
+      title: Text(
+        'Add an encounter',
+        style: Theme.of(context).textTheme.headline6,
+      ),
+      content: Padding(
         padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                'Add an encounter',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ),
-            TextField(
-              controller: _textEditingController,
-              autofocus: true,
-              decoration: InputDecoration(
-                labelText: 'Name of the encounter'
-              ),
-              onSubmitted: (_) => _addEncounter(),
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            ButtonBar(
-              children: [
-                FlatButton(
-                  child: const Text('Add'),
-                  textColor: Theme.of(context).accentColor,
-                  onPressed: _addEncounter,
-                )
-              ],
-            )
-          ],
+        child: TextField(
+          controller: _textEditingController,
+          autofocus: true,
+          decoration: InputDecoration(
+            labelText: 'Name of the encounter'
+          ),
+          onSubmitted: (_) => _addEncounter(),
+          textCapitalization: TextCapitalization.sentences,
         ),
       ),
+      actions: [
+        FlatButton(
+          child: const Text('Add'),
+          textColor: Theme.of(context).accentColor,
+          onPressed: _addEncounter,
+        )
+      ],
     );
   }
 
