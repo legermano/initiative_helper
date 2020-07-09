@@ -2,9 +2,13 @@ import 'package:d20/d20.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_typeahead_web/flutter_typeahead.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
+import 'package:initiative_helper/app/modules/home/models/monsters_model.dart';
+import 'package:initiative_helper/app/modules/home/services/monsters_service.dart';
 import 'package:moor/moor.dart' as moor ;
 import 'package:numberpicker/numberpicker.dart';
 
@@ -78,26 +82,12 @@ class _CharacterDialogState extends State<CharacterDialog> {
         ? 'Crate character'
         : 'Edit character'
       ),
-      content: Column(
+      content: Column(        
         mainAxisSize: MainAxisSize.min,
         children: [
           Form(
             key: _formKey,
-            child: TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                hintText: 'What is the name of the character?',
-                helperText: 'The name of the character'
-              ),
-              textCapitalization: TextCapitalization.sentences,
-              validator: (text) {
-                String validation;
-                if (text.isEmpty) {
-                  validation = "Invalid name";
-                }
-                return validation;
-              },
-            ),
+            child: _buildFormField(),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,6 +195,60 @@ class _CharacterDialogState extends State<CharacterDialog> {
           }, 
         )
       ],
+    );
+  }
+
+  Widget _buildFormField () {
+    return TypeAheadFormField<MonstersModel>(
+      hideOnEmpty: true,
+      hideOnError: true,
+      textFieldConfiguration: TextFieldConfiguration(
+        controller: _nameController,
+        decoration: InputDecoration(
+          hintText: 'What is the name of the character?',
+          helperText: 'The name of the character'
+        ),
+        textCapitalization: TextCapitalization.sentences
+      ),
+      suggestionsCallback: (pattern) async{
+        if (pattern.isNotEmpty) {
+          final service =  Modular.get<MonstersService>();
+          return service.queryRows(name: pattern);
+        } else {
+          return [];
+        }
+      },
+      itemBuilder: (context,suggestion) {
+        return GestureDetector(
+          onPanDown: (_) {
+            print(suggestion.name);
+            _nameController.text = suggestion.name;
+          },
+          child: Container(
+            color: Theme.of(context).brightness == Brightness.light
+              ? Color.fromRGBO(255, 255, 255, 60)
+              : const Color(0xFF474747),
+            child: ListTile(
+              dense: true,
+              title: Text(suggestion.name),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, suggestionsBox, controller) {
+        return suggestionsBox;
+      },
+      onSuggestionSelected: (suggestion) {
+        // final MonstersModel monster = suggestion;
+        // _nameController.text = monster.name;
+      },
+      validator: (text) {
+        String validation;
+        if (text.isEmpty) {
+          validation = "Invalid name";
+        }
+        return validation;
+      },
     );
   }
 }

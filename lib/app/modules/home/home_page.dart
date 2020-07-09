@@ -24,7 +24,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  //! Use 'controller' variable to access controller
+  //! Use 'controller' variable to access controller  
   @override
   void initState() {
     super.initState();

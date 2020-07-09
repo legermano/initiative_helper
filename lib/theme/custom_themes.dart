@@ -16,7 +16,7 @@ final darkTheme = ThemeData(
   ),
   dividerColor: Colors.black12,
   cardColor: const Color(0xFF2D2D2D),
-  selectedRowColor: const Color(0xFF474747),
+  selectedRowColor: const Color(0xFF474747),  
   appBarTheme: AppBarTheme(
     color: CustomColor.darkRed,
   ),
@@ -29,7 +29,8 @@ final lightTheme = ThemeData(
   primarySwatch: CustomColor.red,
   primaryColor: CustomColor.red,
   selectedRowColor: Colors.amber[100],
-  brightness: Brightness.light
+  brightness: Brightness.light,
+  visualDensity: VisualDensity.adaptivePlatformDensity
 );
 
 final customTypography = Typography.material2018(
