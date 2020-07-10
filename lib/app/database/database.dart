@@ -1,5 +1,6 @@
 import 'package:initiative_helper/app/database/daos/characters.dart';
 import 'package:initiative_helper/app/database/daos/encounters.dart';
+import 'package:initiative_helper/utils/enums/conditions.dart';
 import 'package:moor/moor.dart';
 
 part 'database.moor.dart';
@@ -20,9 +21,19 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (m) {
         return m.createAll();
       },
+      onUpgrade: (m, from, to) async{
+        if (from == 1) {
+          await m.addColumn(characters, characters.condition);
+          await m.addColumn(characters, characters.armorClass);
+          await m.addColumn(characters, characters.maxHealthPoints);
+          await m.addColumn(characters, characters.currentHealthPoints);
+          
+          m.issueCustomQuery('UPDATE characters SET ');
+        }
+      },
     );
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 }

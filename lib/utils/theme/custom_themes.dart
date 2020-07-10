@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:initiative_helper/colors/custom_colors.dart';
+import 'package:initiative_helper/utils/colors/custom_colors.dart';
 
 final darkTheme = ThemeData(
   typography: customTypography,

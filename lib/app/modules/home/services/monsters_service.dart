@@ -13,23 +13,11 @@ class MonstersService extends Disposable implements IMonsterService{
   void dispose() {}
 
   @override
-  Future<MonstersModel> findById(id) {
-    // TODO: implement findById
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<MonstersModel>> queryRows({String name}) async{
     Future<List<MonstersModel>> rows;
     name.isNotEmpty 
       ? rows = monstersRepository.queryRows(name: name)
       : rows = monstersRepository.queryRows();
     return rows;  
-  }
-
-  @override
-  Future<int> queryRowCount() {
-    // TODO: implement queryRowCount
-    throw UnimplementedError();
   }
 }

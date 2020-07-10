@@ -2,12 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dio/dio.dart';
 
-import 'package:initiative_helper/app/modules/home/repositories/monsters_repository.dart';
+// import 'package:initiative_helper/app/modules/home/repositories/monsters_repository.dart';
 
 class MockClient extends Mock implements Dio {}
 
 void main() {
-  MonstersRepository repository;
+  // MonstersRepository repository;
   // MockClient client;
 
   setUp(() {

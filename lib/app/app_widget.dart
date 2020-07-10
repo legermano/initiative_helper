@@ -1,7 +1,7 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:initiative_helper/theme/custom_themes.dart';
+import 'package:initiative_helper/utils/theme/custom_themes.dart';
 
 class AppWidget extends StatelessWidget {
   @override

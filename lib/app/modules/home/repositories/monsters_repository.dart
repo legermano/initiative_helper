@@ -12,12 +12,6 @@ class MonstersRepository extends Disposable implements IMonstersRepository{
   void dispose() {}
 
   @override
-  Future<MonstersModel> findById(id) {
-    // TODO: implement findById
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<MonstersModel>> queryRows({String name}) async{           
     final response = await client.get(baseUrl,queryParameters: {
       'name': name,
@@ -27,11 +21,5 @@ class MonstersRepository extends Disposable implements IMonstersRepository{
         (monster) => MonstersModel.fromJson(monster)
       )
     );     
-  }
-
-  @override
-  Future<int> queryRowCount() {
-    // TODO: implement queryRowCount
-    throw UnimplementedError();
   }
 }

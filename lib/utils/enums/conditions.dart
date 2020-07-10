@@ -1,0 +1,19 @@
+enum Conditions {
+  blinded,
+  charmed,
+  deafened,
+  fatigued,
+  frightened,
+  grappled,
+  incapacitated,
+  invisible,
+  normal,
+  paralyzed,
+  petrified,
+  poisoned,
+  prone,
+  restrained,
+  stunned,
+  unconscious,
+  exhaustion
+}

@@ -5,7 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_card.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
 import 'package:initiative_helper/app/modules/home/widgets/encounters_drawer.dart';
-import 'package:initiative_helper/animations/fade_in.dart';
+import 'package:initiative_helper/utils/animations/fade_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'home_controller.dart';

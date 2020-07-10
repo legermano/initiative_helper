@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:d20/d20.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -30,7 +32,6 @@ class _CharacterDialogState extends State<CharacterDialog> {
 
   final TextEditingController _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  // final _dialogKey = GlobalKey<AlertDialog>();
 
   //* It needs to be initialized here, because I need the references of it on the moment it throws the dice to get values
   NumberPicker initiativePicker;
@@ -202,6 +203,7 @@ class _CharacterDialogState extends State<CharacterDialog> {
     return TypeAheadFormField<MonstersModel>(
       hideOnEmpty: true,
       hideOnError: true,
+      hideOnLoading: true,
       textFieldConfiguration: TextFieldConfiguration(
         controller: _nameController,
         decoration: InputDecoration(
@@ -219,28 +221,34 @@ class _CharacterDialogState extends State<CharacterDialog> {
         }
       },
       itemBuilder: (context,suggestion) {
-        return GestureDetector(
-          onPanDown: (_) {
-            print(suggestion.name);
-            _nameController.text = suggestion.name;
-          },
-          child: Container(
-            color: Theme.of(context).brightness == Brightness.light
-              ? Color.fromRGBO(255, 255, 255, 60)
-              : const Color(0xFF474747),
-            child: ListTile(
-              dense: true,
-              title: Text(suggestion.name),
+        if (Platform.isIOS || Platform.isAndroid) {
+          return ListTile(
+            title: Text(suggestion.name),
+          );
+        } else {
+          //? Workaround to work on the web
+          return GestureDetector(
+            onPanDown: (_) {
+              print(suggestion.name);
+              _nameController.text = suggestion.name;
+            },
+            child: Container(
+              color: Theme.of(context).brightness == Brightness.light
+                ? Color.fromRGBO(255, 255, 255, 60)
+                : const Color(0xFF474747),
+              child: ListTile(
+                dense: true,
+                title: Text(suggestion.name),
+              ),
             ),
-          ),
-        );
+          );
+        }        
       },
       transitionBuilder: (context, suggestionsBox, controller) {
         return suggestionsBox;
       },
       onSuggestionSelected: (suggestion) {
-        // final MonstersModel monster = suggestion;
-        // _nameController.text = monster.name;
+        _nameController.text = suggestion.name;
       },
       validator: (text) {
         String validation;
