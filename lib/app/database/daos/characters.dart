@@ -10,7 +10,7 @@ class Characters extends Table {
   TextColumn get name => text()();
   IntColumn get initiative => integer()();
   IntColumn get modifier => integer().nullable()(); 
-  IntColumn get condition => intEnum<Conditions>().clientDefault(() => 8)(); //Default is Conditions.normal
+  IntColumn get condition => intEnum<Conditions>().withDefault(const Constant(8))(); //Default is Conditions.normal
   IntColumn get armorClass => integer().nullable()();
   IntColumn get maxHealthPoints => integer().nullable()();
   IntColumn get currentHealthPoints => integer().nullable()();

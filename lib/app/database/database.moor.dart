@@ -604,11 +604,8 @@ class $CharactersTable extends Characters
   @override
   GeneratedIntColumn get condition => _condition ??= _constructCondition();
   GeneratedIntColumn _constructCondition() {
-    return GeneratedIntColumn(
-      'condition',
-      $tableName,
-      false,
-    )..clientDefault = () => 8;
+    return GeneratedIntColumn('condition', $tableName, false,
+        defaultValue: const Constant(8));
   }
 
   final VerificationMeta _armorClassMeta = const VerificationMeta('armorClass');

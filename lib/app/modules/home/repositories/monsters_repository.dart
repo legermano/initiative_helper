@@ -5,7 +5,7 @@ import 'package:initiative_helper/app/modules/home/repositories/interfaces/monst
 
 class MonstersRepository extends Disposable implements IMonstersRepository{
   final client = Dio();
-  final baseUrl = 'http://192.168.1.13:8888/heroes';
+  final baseUrl = 'https://dnd-monsters-api.herokuapp.com/monsters';
 
   //dispose will be called automatically
   @override
@@ -20,6 +20,6 @@ class MonstersRepository extends Disposable implements IMonstersRepository{
       response.data.map(
         (monster) => MonstersModel.fromJson(monster)
       )
-    );     
+    );
   }
 }

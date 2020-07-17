@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttericon/octicons_icons.dart';
 import 'package:initiative_helper/app/database/database.dart';
 import 'package:initiative_helper/app/modules/home/home_controller.dart';
 import 'package:initiative_helper/app/modules/home/widgets/character_dialog.dart';
+import 'package:initiative_helper/utils/enums/conditions.dart';
 
 class CharacterCard extends StatelessWidget {
   final HomeController controller;
@@ -25,35 +27,14 @@ class CharacterCard extends StatelessWidget {
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.25,
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(ch.name),
-                      Row(
-                        children: [
-                          Text(
-                            'Initiative : '+ch.initiative.toString(),
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          SizedBox(width: 8,),
-                          Text(
-                            'Modifier : '+ch.modifier.toString(),
-                            style: const TextStyle(fontSize: 12),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              )
+              _characterInfo(ch),
+              _armorClass(ch.armorClass.toString()),
+              _currentHitPointClass(ch.currentHealthPoints.toString()),
+              _conditionsDropDownButton(character)
             ],
           ),
         ),
@@ -83,6 +64,83 @@ class CharacterCard extends StatelessWidget {
           onDismissed: (actionType) => controller.deleteCharacter(character),
         ),
       ),
+    );
+  }
+
+  Widget _characterInfo(Character character) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(character.name),
+        Row(
+          children: [
+            Text(
+              'Initiative : ${character.initiative.toString()}',
+              style: const TextStyle(fontSize: 12),
+            ),
+            SizedBox(width: 8,),
+            Text(
+              'Modifier : ${character.modifier.toString()}',
+              style: const TextStyle(fontSize: 12),
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _armorClass(String armorClass) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Icon(
+          Octicons.shield,
+          color: Colors.grey,
+          size: 34,
+        ),
+        Text(
+          armorClass,
+          style: TextStyle(fontSize: 15, color: Colors.white),
+        )
+      ],
+    );
+  }
+
+  Widget _currentHitPointClass(String hitPoints) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Icon(
+          Octicons.heart,
+          color: Colors.red,
+          size: 48,
+        ),
+        Text(
+          hitPoints,
+          style: TextStyle(fontSize: 15, color: Colors.white),
+        )
+      ],
+    );
+  }  
+
+  Widget _conditionsDropDownButton(CharacterWithInfo chInfo) {
+    return DropdownButton<Conditions>(
+      value: chInfo.character.condition,
+      onChanged: (value) {
+        final ch = chInfo.character.copyWith(
+          condition: value
+        );
+        CharacterWithInfo character = chInfo;        
+        character.character = ch;
+        controller.updateCharacter(character);
+      }, 
+      items: Conditions.values.map((c) {
+        return DropdownMenuItem<Conditions>(
+          value: c,
+          child: Text(c.toString().split('.').last),
+        );
+      }).toList(),
     );
   }
 }

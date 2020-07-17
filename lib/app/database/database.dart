@@ -19,16 +19,16 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (m) {
-        return m.createAll();
+        return m.createAll();        
       },
       onUpgrade: (m, from, to) async{
         if (from == 1) {
           await m.addColumn(characters, characters.condition);
           await m.addColumn(characters, characters.armorClass);
           await m.addColumn(characters, characters.maxHealthPoints);
-          await m.addColumn(characters, characters.currentHealthPoints);
-          
-          m.issueCustomQuery('UPDATE characters SET ');
+          await m.addColumn(characters, characters.currentHealthPoints);          
+                            
+          m.issueCustomQuery('UPDATE characters SET condition = 8 WHERE condition IS NULL');
         }
       },
     );
