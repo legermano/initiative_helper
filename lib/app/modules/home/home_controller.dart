@@ -138,8 +138,12 @@ abstract class _HomeControllerBase with Store {
           encounter: charactersCompanion.encounter.value, 
           name: charactersCompanion.name.value, 
           initiative: charactersCompanion.initiative.value,
-          modifier: charactersCompanion.modifier.value
-        ), 
+          modifier: charactersCompanion.modifier.value,
+          condition: charactersCompanion.condition.value,
+          armorClass: charactersCompanion.armorClass.value,
+          maxHealthPoints: charactersCompanion.maxHealthPoints.value,
+          currentHealthPoints: charactersCompanion.currentHealthPoints.value
+        ),
         initiativeWithModifier: 
           (charactersCompanion.initiative.value + charactersCompanion.modifier.value), 
         turn: false

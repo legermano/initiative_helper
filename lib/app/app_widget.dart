@@ -1,25 +1,34 @@
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:initiative_helper/colors/custom_colors.dart';
+import 'package:initiative_helper/utils/theme/custom_themes.dart';
 
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      navigatorKey: Modular.navigatorKey,
-      title: 'Initiative Helper',
-      theme: ThemeData(
-        primarySwatch: CustomColor.red,
-        // use the good-looking updated material text style
-        typography: Typography.material2018(
-            englishLike: Typography.englishLike2018,
-            dense: Typography.dense2018,
-            tall: Typography.tall2018,
-        ), 
-      ),
-      initialRoute: '/',
-      onGenerateRoute: Modular.generateRoute,
+    //* Get the device currently  theme    
+    final window = WidgetsBinding.instance.window;    
+    return DynamicTheme(
+      //? When there's no saved brightness, probably on the first time opening the app,
+      //? Use the device default brightness
+      defaultBrightness: window.platformBrightness,
+      data: (brightness) {
+        if (brightness == Brightness.light) {
+          return lightTheme;
+        } else {
+          return darkTheme;
+        }
+      },
+      themedWidgetBuilder: (context, data) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          navigatorKey: Modular.navigatorKey,
+          title: 'Initiative Helper',
+          theme: data,
+          initialRoute: '/',
+          onGenerateRoute: Modular.generateRoute,
+        );
+      },
     );
   }
 }

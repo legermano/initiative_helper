@@ -1,4 +1,5 @@
 import 'package:initiative_helper/app/database/database.dart';
+import 'package:initiative_helper/utils/enums/conditions.dart';
 import 'package:moor/moor.dart';
 
 part 'characters.moor.dart';
@@ -9,6 +10,10 @@ class Characters extends Table {
   TextColumn get name => text()();
   IntColumn get initiative => integer()();
   IntColumn get modifier => integer().nullable()(); 
+  IntColumn get condition => intEnum<Conditions>().withDefault(const Constant(8))(); //Default is Conditions.normal
+  IntColumn get armorClass => integer().nullable()();
+  IntColumn get maxHealthPoints => integer().nullable()();
+  IntColumn get currentHealthPoints => integer().nullable()();
 }
 
 @UseDao(tables: [Characters])
@@ -36,15 +41,8 @@ class CharacterDao extends DatabaseAccessor<AppDatabase> with _$CharacterDaoMixi
 
     query.where(db.encounters.id.equals(encounter.id));
 
-    // return query.watch().map((rows) {
-    //   return rows.map((rows) {
-    //     return Character(id: null, encounter: null, name: null, initiative: null);
-    //   }).toList();
-    // });
-
     return query.map((row) {
       return row.readTable(characters);
-      // Character.fromData(row.rawData.data, db);
     }).get();
   }
   
