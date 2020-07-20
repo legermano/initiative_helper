@@ -55,9 +55,9 @@ class _CharacterDialogState extends State<CharacterDialog> {
 
     _nameController.text = isCreating ? '' : widget.character.character.name;
     _armorClassController.text =
-        isCreating ? '0' : widget.character.character.armorClass;
+        isCreating ? '0' : widget.character.character.armorClass.toString();
     _maxHitPointsController.text =
-        isCreating ? '0' : widget.character.character.maxHealthPoints;
+        isCreating ? '0' : widget.character.character.maxHealthPoints.toString();
     initiativeValue = isCreating ? 0 : widget.character.character.initiative;
     modifierValue = isCreating ? 0 : widget.character.character.modifier;
 

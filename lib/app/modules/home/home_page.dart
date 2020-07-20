@@ -43,7 +43,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   @override
   Widget build(BuildContext context) {    
-    final bool displayMobileLayout = MediaQuery.of(context).size.width < 700;
+    final bool displayMobileLayout = MediaQuery.of(context).size.width < 900;
     return Row(
       children: [
         if (!displayMobileLayout)
