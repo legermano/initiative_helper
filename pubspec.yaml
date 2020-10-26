@@ -24,11 +24,11 @@ dependencies:
   dio: ^3.0.9
   flutter_mobx: ^1.1.0
   mobx: ^1.2.1
-  flutter_modular: ^1.2.5+1
+  flutter_modular: ^2.0.1
   flutter:
     sdk: flutter
-  moor: ^3.1.0
-  moor_ffi: ^0.6.0
+  moor: ^3.3.1
+  moor_ffi: ^0.8.0
   path: ^1.7.0
   path_provider: ^1.6.10
   numberpicker: ^1.2.0

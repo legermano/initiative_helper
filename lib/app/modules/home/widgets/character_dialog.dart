@@ -306,7 +306,7 @@ class _CharacterDialogState extends State<CharacterDialog> {
         decoration: InputDecoration(helperText: 'Armor Class'),
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly
+          FilteringTextInputFormatter.digitsOnly
         ],
         validator: (value) {
           String validation;
@@ -329,7 +329,7 @@ class _CharacterDialogState extends State<CharacterDialog> {
         ),
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly
+          FilteringTextInputFormatter.digitsOnly
         ],
         validator: (value) {
           String validation;

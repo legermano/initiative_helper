@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(characters, characters.maxHealthPoints);
           await m.addColumn(characters, characters.currentHealthPoints);          
                             
-          m.issueCustomQuery('UPDATE characters SET condition = 8 WHERE condition IS NULL');
+          await customStatement('UPDATE characters SET condition = 8 WHERE condition IS NULL');
         }
       },
     );
